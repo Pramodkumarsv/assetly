@@ -38,7 +38,7 @@ export default function LoginPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-white">IT Asset Manager</h1>
+          <h1 className="text-2xl font-bold text-white">ASSETLY Manager</h1>
           <p className="text-brand-100 text-sm mt-1">Sign in to your account</p>
         </div>
 

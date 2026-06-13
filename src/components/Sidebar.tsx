@@ -29,7 +29,7 @@ export default function Sidebar() {
             </svg>
           </div>
           <div>
-            <p className="text-white font-semibold text-sm">IT Asset Manager</p>
+            <p className="text-white font-semibold text-sm">ASSETLY Manager</p>
             <p className="text-brand-300 text-xs">{session?.user?.name}</p>
           </div>
         </div>
