@@ -30,65 +30,71 @@ export default async function AssetDetailPage({ params }: { params: { id: string
   if (!asset) notFound()
 
   return (
-    <div className="p-8 max-w-3xl">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="mx-auto max-w-6xl px-6 py-10 lg:px-8">
+      <div className="mb-8 flex flex-col gap-4 rounded-[2rem] border border-slate-200 bg-white/95 p-6 shadow-xl md:flex-row md:items-start md:justify-between">
         <div>
-          <Link href="/assets" className="text-sm text-gray-500 hover:text-gray-700">← Back to Assets</Link>
-          <h1 className="text-2xl font-bold text-gray-900 mt-2">{asset.name}</h1>
+          <Link href="/assets" className="text-sm font-medium text-slate-500 transition hover:text-slate-700">← Back to Assets</Link>
+          <h1 className="mt-3 text-3xl font-semibold text-slate-950">{asset.name}</h1>
+          <p className="mt-2 text-sm text-slate-500">{asset.type} · {asset.brand || 'Unknown brand'}</p>
         </div>
-        <div className="flex gap-3">
-          <Link href={`/assets/${asset.id}/edit`} className="btn-secondary">Edit</Link>
+        <div className="flex flex-wrap gap-3">
+          <Link href={`/assets/${asset.id}/edit`} className="btn btn-secondary px-4 py-2">
+            Edit
+          </Link>
           <DeleteButton id={asset.id} />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Image */}
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[320px_1fr]">
         {asset.imageUrl && (
-          <div className="md:col-span-1">
-            <div className="card p-0 overflow-hidden">
-              <Image src={asset.imageUrl} alt={asset.name} width={400} height={300} className="w-full object-cover" />
+          <div className="rounded-[2rem] border border-slate-200 bg-white/95 p-4 shadow-xl">
+            <div className="overflow-hidden rounded-[1.75rem] bg-slate-950">
+              <Image src={asset.imageUrl} alt={asset.name} width={600} height={400} className="h-full w-full object-cover" />
             </div>
           </div>
         )}
 
-        <div className={`space-y-6 ${asset.imageUrl ? 'md:col-span-2' : 'md:col-span-3'}`}>
-          {/* Status */}
-          <div className="card flex items-center justify-between">
-            <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Status</p>
-              <span className={`text-sm font-semibold px-3 py-1 rounded-full ${statusColors[asset.status]}`}>
-                {asset.status}
-              </span>
-            </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Type</p>
-              <p className="text-sm font-semibold text-gray-800">{asset.type}</p>
-            </div>
-            {asset.purchasePrice && (
+        <div className="space-y-6">
+          <div className="rounded-[2rem] border border-slate-200 bg-white/95 p-6 shadow-xl">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Value</p>
-                <p className="text-sm font-semibold text-gray-800">₹{asset.purchasePrice.toLocaleString('en-IN')}</p>
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">Status</p>
+                <span className={`mt-2 inline-flex rounded-full px-3 py-1 text-sm font-semibold ${statusColors[asset.status]}`}>
+                  {asset.status}
+                </span>
               </div>
-            )}
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">Type</p>
+                  <p className="mt-2 text-sm font-semibold text-slate-950">{asset.type}</p>
+                </div>
+                {asset.purchasePrice && (
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">Value</p>
+                    <p className="mt-2 text-sm font-semibold text-slate-950">₹{asset.purchasePrice.toLocaleString('en-IN')}</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
-          {/* Details */}
-          <div className="card grid grid-cols-2 gap-4">
-            <Field label="Brand" value={asset.brand} />
-            <Field label="Model" value={asset.model} />
-            <Field label="Serial Number" value={asset.serialNumber} />
-            <Field label="Location" value={asset.location} />
-            <Field label="Assigned To" value={asset.assignedTo} />
-            <Field label="Purchase Date" value={asset.purchaseDate?.toLocaleDateString('en-IN')} />
-            <Field label="Warranty Expiry" value={asset.warrantyExpiry?.toLocaleDateString('en-IN')} />
-            <Field label="Added By" value={asset.createdBy.name} />
+          <div className="rounded-[2rem] border border-slate-200 bg-white/95 p-6 shadow-xl">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Brand" value={asset.brand} />
+              <Field label="Model" value={asset.model} />
+              <Field label="Serial Number" value={asset.serialNumber} />
+              <Field label="Location" value={asset.location} />
+              <Field label="Assigned To" value={asset.assignedTo} />
+              <Field label="Purchase Date" value={asset.purchaseDate?.toLocaleDateString('en-IN')} />
+              <Field label="Warranty Expiry" value={asset.warrantyExpiry?.toLocaleDateString('en-IN')} />
+              <Field label="Added By" value={asset.createdBy.name} />
+            </div>
           </div>
 
           {asset.notes && (
-            <div className="card">
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Notes</p>
-              <p className="text-sm text-gray-700">{asset.notes}</p>
+            <div className="rounded-[2rem] border border-slate-200 bg-white/95 p-6 shadow-xl">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400 mb-3">Notes</p>
+              <p className="text-sm leading-7 text-slate-700">{asset.notes}</p>
             </div>
           )}
         </div>

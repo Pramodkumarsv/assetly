@@ -10,6 +10,9 @@ const nav = [
   { href: '/assets', label: 'Assets', icon: (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
   )},
+  { href: '/accessories', label: 'Accessories', icon: (
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M5 7h14M5 17h14" />
+  )},
   { href: '/assets/new', label: 'Add Asset', icon: (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
   )},
@@ -21,7 +24,7 @@ export default function Sidebar() {
 
   return (
     <aside className="w-64 bg-brand-900 min-h-screen flex flex-col">
-      <div className="p-6 border-b border-brand-700">
+      <div className="p-5 border-b border-brand-700">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-brand-500 rounded-lg flex items-center justify-center">
             <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -29,7 +32,7 @@ export default function Sidebar() {
             </svg>
           </div>
           <div>
-            <p className="text-white font-semibold text-sm">ASSETLY Manager</p>
+            <p className="text-white font-semibold text-sm">ASSETLY</p>
             <p className="text-brand-300 text-xs">{session?.user?.name}</p>
           </div>
         </div>

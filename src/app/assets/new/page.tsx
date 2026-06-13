@@ -4,12 +4,15 @@ import { useRouter } from 'next/navigation'
 import { uploadFile } from '@/lib/supabase'
 import Link from 'next/link'
 
-const ASSET_TYPES = ['LAPTOP','DESKTOP','PHONE','TABLET','MONITOR','KEYBOARD','MOUSE','PRINTER','SERVER','NETWORKING','SOFTWARE','OTHER']
-const ASSET_STATUSES = ['AVAILABLE','ASSIGNED','MAINTENANCE','RETIRED','LOST']
+const MAIN_ASSET_TYPES = ['LAPTOP', 'DESKTOP', 'PHONE', 'TABLET']
+const ACCESSORY_TYPES = ['MONITOR', 'KEYBOARD', 'MOUSE', 'PRINTER', 'SERVER', 'NETWORKING', 'SOFTWARE', 'OTHER']
+const ASSET_TYPES = [...MAIN_ASSET_TYPES, ...ACCESSORY_TYPES]
+const ASSET_STATUSES = ['AVAILABLE', 'ASSIGNED', 'MAINTENANCE', 'RETIRED', 'LOST']
 
 export default function NewAssetPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [form, setForm] = useState({
     name: '', type: 'LAPTOP', status: 'AVAILABLE',
@@ -19,6 +22,8 @@ export default function NewAssetPage() {
     assignedTo: '', notes: '',
   })
 
+  const isAccessory = !MAIN_ASSET_TYPES.includes(form.type)
+
   function set(field: string, value: string) {
     setForm(prev => ({ ...prev, [field]: value }))
   }
@@ -26,22 +31,30 @@ export default function NewAssetPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
+    setError('')
 
-    let imageUrl = null
-    if (imageFile) {
-      imageUrl = await uploadFile(imageFile, 'images')
-    }
+    try {
+      let imageUrl = null
+      if (imageFile) {
+        imageUrl = await uploadFile(imageFile, 'images')
+      }
 
-    const res = await fetch('/api/assets', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, imageUrl }),
-    })
+      const res = await fetch('/api/assets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, imageUrl, isAccessory }),
+      })
 
-    if (res.ok) {
-      router.push('/assets')
-    } else {
-      alert('Failed to create asset. Please try again.')
+      const data = await res.json()
+
+      if (res.ok) {
+        router.push(isAccessory ? '/accessories' : '/assets')
+      } else {
+        setError(data.error || 'Failed to create asset. Please try again.')
+        setLoading(false)
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
       setLoading(false)
     }
   }
@@ -49,9 +62,16 @@ export default function NewAssetPage() {
   return (
     <div className="p-8 max-w-2xl">
       <div className="mb-6">
-        <Link href="/assets" className="text-sm text-gray-500 hover:text-gray-700">← Back to Assets</Link>
-        <h1 className="text-2xl font-bold text-gray-900 mt-2">Add New Asset</h1>
+        <Link href={isAccessory ? '/accessories' : '/assets'} className="text-sm text-gray-500 hover:text-gray-700">← Back</Link>
+        <h1 className="text-2xl font-bold text-gray-900 mt-2">Add New {isAccessory ? 'Accessory' : 'Asset'}</h1>
+        {isAccessory && <p className="text-sm text-slate-600 mt-1">Selected type will be added to Accessories</p>}
       </div>
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-700 text-sm font-medium">{error}</p>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info */}
@@ -65,7 +85,12 @@ export default function NewAssetPage() {
             <div>
               <label className="label">Type *</label>
               <select className="input" value={form.type} onChange={e => set('type', e.target.value)}>
-                {ASSET_TYPES.map(t => <option key={t}>{t}</option>)}
+                <optgroup label="Assets">
+                  {MAIN_ASSET_TYPES.map(t => <option key={t}>{t}</option>)}
+                </optgroup>
+                <optgroup label="Accessories">
+                  {ACCESSORY_TYPES.map(t => <option key={t}>{t}</option>)}
+                </optgroup>
               </select>
             </div>
             <div>
@@ -145,9 +170,9 @@ export default function NewAssetPage() {
 
         <div className="flex gap-3">
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? 'Saving...' : 'Save Asset'}
+            {loading ? 'Saving...' : 'Save'}
           </button>
-          <Link href="/assets" className="btn-secondary">Cancel</Link>
+          <Link href={isAccessory ? '/accessories' : '/assets'} className="btn-secondary">Cancel</Link>
         </div>
       </form>
     </div>

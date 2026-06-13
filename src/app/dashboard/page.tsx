@@ -33,48 +33,53 @@ export default async function DashboardPage() {
   ]
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+      <div className="mb-10 flex flex-col gap-4 rounded-[2rem] border border-slate-200 bg-white/95 p-6 shadow-xl md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 text-sm mt-1">Welcome back, {session?.user?.name}</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-950">Dashboard</h1>
+          <p className="mt-2 text-sm text-slate-500">Welcome back, {session?.user?.name}</p>
         </div>
-        <Link href="/assets/new" className="btn-primary">
+        <Link href="/assets/new" className="btn btn-primary px-5 py-3 text-sm">
           + Add Asset
         </Link>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4 mb-8">
         {stats.map(stat => (
-          <div key={stat.label} className="card">
-            <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg ${stat.bg} mb-3`}>
-              <span className={`text-lg font-bold ${stat.color}`}>{stat.value}</span>
+          <div key={stat.label} className="rounded-[1.75rem] border border-slate-200 bg-white/95 p-6 shadow-sm">
+            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl ${stat.bg} mb-4`}>
+              <span className={`text-lg font-semibold ${stat.color}`}>{stat.value}</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-            <p className="text-sm text-gray-500">{stat.label}</p>
+            <p className="text-3xl font-semibold text-slate-950">{stat.value}</p>
+            <p className="mt-2 text-sm text-slate-500">{stat.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Assets */}
-        <div className="card">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-gray-900">Recent Assets</h2>
-            <Link href="/assets" className="text-sm text-brand-600 hover:text-brand-700">View all →</Link>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <div className="rounded-[2rem] border border-slate-200 bg-white/95 p-6 shadow-xl">
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-950">Recent Assets</h2>
+              <p className="text-sm text-slate-500">Quick access to your latest inventory.</p>
+            </div>
+            <Link href="/assets" className="text-sm font-medium text-brand-600 hover:text-brand-700">
+              View all →
+            </Link>
           </div>
           {recentAssets.length === 0 ? (
-            <p className="text-gray-400 text-sm text-center py-8">No assets yet. <Link href="/assets/new" className="text-brand-600">Add one</Link></p>
+            <div className="rounded-3xl border border-dashed border-slate-200 p-12 text-center text-sm text-slate-500">
+              No assets yet. <Link href="/assets/new" className="font-semibold text-brand-600 hover:text-brand-700">Add one</Link>
+            </div>
           ) : (
             <div className="space-y-3">
               {recentAssets.map(asset => (
-                <Link key={asset.id} href={`/assets/${asset.id}`} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <Link key={asset.id} href={`/assets/${asset.id}`} className="flex items-center justify-between gap-4 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-4 transition hover:border-slate-300 hover:bg-white">
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{asset.name}</p>
-                    <p className="text-xs text-gray-500">{asset.type} {asset.brand ? `· ${asset.brand}` : ''}</p>
+                    <p className="text-sm font-semibold text-slate-950">{asset.name}</p>
+                    <p className="mt-1 text-xs text-slate-500">{asset.type} {asset.brand ? `· ${asset.brand}` : ''}</p>
                   </div>
-                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${statusColors[asset.status]}`}>
+                  <span className={`text-xs font-semibold rounded-full px-3 py-1 ${statusColors[asset.status]}`}>
                     {asset.status}
                   </span>
                 </Link>
@@ -83,35 +88,39 @@ export default async function DashboardPage() {
           )}
         </div>
 
-        {/* Asset Types Breakdown */}
-        <div className="card">
-          <h2 className="font-semibold text-gray-900 mb-4">By Type</h2>
+        <div className="rounded-[2rem] border border-slate-200 bg-white/95 p-6 shadow-xl">
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-950">Asset Types</h2>
+              <p className="text-sm text-slate-500">Based on your current inventory</p>
+            </div>
+          </div>
           {byType.length === 0 ? (
-            <p className="text-gray-400 text-sm text-center py-8">No data yet</p>
+            <div className="rounded-3xl border border-dashed border-slate-200 p-12 text-center text-sm text-slate-500">
+              No data yet
+            </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-5">
               {byType.map(item => (
-                <div key={item.type} className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="font-medium text-gray-700">{item.type}</span>
-                      <span className="text-gray-500">{item._count}</span>
-                    </div>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-brand-500 rounded-full"
-                        style={{ width: `${(item._count / totalAssets) * 100}%` }}
-                      />
-                    </div>
+                <div key={item.type} className="space-y-3">
+                  <div className="flex items-center justify-between text-sm text-slate-700">
+                    <span className="font-medium">{item.type}</span>
+                    <span className="text-slate-500">{item._count}</span>
+                  </div>
+                  <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                    <div
+                      className="h-full rounded-full bg-brand-500"
+                      style={{ width: `${totalAssets ? (item._count / totalAssets) * 100 : 0}%` }}
+                    />
                   </div>
                 </div>
               ))}
             </div>
           )}
           {totalValue._sum.purchasePrice && (
-            <div className="mt-6 pt-4 border-t border-gray-100">
-              <p className="text-xs text-gray-500">Total asset value</p>
-              <p className="text-xl font-bold text-gray-900">
+            <div className="mt-6 pt-5 border-t border-slate-200">
+              <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Total asset value</p>
+              <p className="mt-2 text-2xl font-semibold text-slate-950">
                 ₹{totalValue._sum.purchasePrice.toLocaleString('en-IN')}
               </p>
             </div>

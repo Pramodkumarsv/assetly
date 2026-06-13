@@ -2,15 +2,19 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
+import Topbar from '@/components/Topbar'
 
 export default async function AssetsLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions)
   if (!session) redirect('/login')
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-slate-950 text-slate-100">
       <Sidebar />
-      <main className="flex-1 overflow-auto">{children}</main>
+      <div className="flex-1 flex flex-col">
+        <Topbar />
+        <main className="flex-1 overflow-auto">{children}</main>
+      </div>
     </div>
   )
 }

@@ -23,6 +23,7 @@ model Asset {
   name         String
   type         AssetType
   status       AssetStatus @default(AVAILABLE)
+  isAccessory  Boolean     @default(false)
   serialNumber String?     @unique
   brand        String?
   model        String?

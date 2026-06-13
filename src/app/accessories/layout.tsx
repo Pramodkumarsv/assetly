@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 import Topbar from '@/components/Topbar'
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function AccessoriesLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions)
   if (!session) redirect('/login')
 
